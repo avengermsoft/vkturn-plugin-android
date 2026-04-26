@@ -37,9 +37,9 @@ jobs:
       - name: Rename APKs
         run: |
           cd app/build/outputs/apk/debug
-          # Rename each split APK, e.g., app-arm64-v8a-debug.apk -> slipstream-v1.0.0-arm64-v8a-debug.apk
+          # Rename each split APK, e.g., app-arm64-v8a-debug.apk -> vkturn-v1.0.0-arm64-v8a-debug.apk
           for apk in *.apk; do
-            mv "$apk" "slipstream-${{ github.event.inputs.tag_name }}-${apk#app-}"
+            mv "$apk" "vkturn-${{ github.event.inputs.tag_name }}-${apk#app-}"
           done
 
       - name: Create Release
