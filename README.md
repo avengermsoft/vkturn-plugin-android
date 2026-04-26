@@ -1,2 +1,3 @@
-# vkturn-plugin-android
-Client-only SIP003 plugin built from vk-turn-proxy
+# VKTurn Android Plugin
+
+Client-only SIP003 plugin built from vk-turn-proxy.
