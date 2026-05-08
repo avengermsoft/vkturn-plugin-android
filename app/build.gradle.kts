@@ -52,3 +52,30 @@ dependencies {
     androidTestImplementation("androidx.test:runner:1.7.0")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.7.0")
 }
+
+tasks.register<Exec>("buildGoBinaries") {
+    group = "build"
+    description = "Compiles Go binaries for Android"
+    workingDir = rootDir
+
+    // Enable incremental builds: only run if Go files or build script changed
+    inputs.dir(file("${rootDir}/external")).withPathSensitivity(PathSensitivity.RELATIVE)
+    inputs.file(file("${rootDir}/build.sh")).withPathSensitivity(PathSensitivity.RELATIVE)
+    outputs.dir(file("${projectDir}/src/main/jniLibs"))
+
+    // Pass NDK path from AGP to script (AGP 8.x / 9.x compatible)
+    val androidComponents = project.extensions.findByType<com.android.build.api.variant.ApplicationAndroidComponentsExtension>()
+    val ndkDir = try {
+        androidComponents?.sdkComponents?.ndkDirectory?.orNull?.asFile?.absolutePath
+    } catch (_: Exception) {
+        null
+    }
+
+    if (ndkDir != null) environment("NDK_PATH", ndkDir)
+    commandLine("bash", "-c", "chmod +x build.sh && ./build.sh")
+}
+
+// Заставляем Android собирать бинарники перед компиляцией Java/Kotlin кода
+tasks.named("preBuild") {
+    dependsOn("buildGoBinaries")
+}
