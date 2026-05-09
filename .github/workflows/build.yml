@@ -63,7 +63,7 @@ jobs:
         with:
           files: app/build/outputs/apk/release/*.apk
           generate_release_notes: true
-          tag: ${{ steps.tagver.outputs.version }}
-          overwrite: true
+          tag_name: ${{ steps.tagver.outputs.version }}
+          overwrite_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
