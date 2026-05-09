@@ -47,11 +47,11 @@ jobs:
         uses: ChrSchu90/GitTagSemanticVersion@v1.1
 
       - name: Build APKs
-        run: ./gradlew assembleRelease -PversionName=${{ steps.tagver.outputs.version }}
+        run: ./gradlew assembleDebug -PversionName=${{ steps.tagver.outputs.version }}
 
       - name: Rename APKs
         run: |
-          cd app/build/outputs/apk/release
+          cd app/build/outputs/apk/debug
           # Rename each split APK, e.g., app-arm64-v8a-debug.apk -> vkturn-v1.0.0-arm64-v8a-debug.apk
           for apk in *.apk; do
             mv "$apk" "vkturn-${{ steps.tagver.outputs.version }}-${apk#app-}"
@@ -61,7 +61,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/v')
         with:
-          files: app/build/outputs/apk/release/*.apk
+          files: app/build/outputs/apk/debug/*.apk
           generate_release_notes: true
           tag_name: ${{ steps.tagver.outputs.version }}
           overwrite_files: true
